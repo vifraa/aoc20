@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	input, err := util.ReadInput("./day1/input.txt")
+	input, err := util.ReadInputAsInt("./day1/input.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -19,7 +19,7 @@ func main() {
 func part1(input []int) int {
 	for i := 0; i < len(input); i++ {
 		for j := i; j < len(input); j++ {
-			if input[i] + input[j] == 2020 {
+			if input[i]+input[j] == 2020 {
 				return input[i] * input[j]
 			}
 
@@ -28,12 +28,11 @@ func part1(input []int) int {
 	return 0
 }
 
-
 func part2(input []int) int {
 	for i := 0; i < len(input); i++ {
 		for j := i; j < len(input); j++ {
 			for k := j; k < len(input); k++ {
-				if input[i] + input[j] + input[k] == 2020 {
+				if input[i]+input[j]+input[k] == 2020 {
 					return input[i] * input[j] * input[k]
 				}
 			}
