@@ -7,27 +7,29 @@ import (
 	"strings"
 )
 
-const (
-	birthYear      = "byr"
-	issueYear      = "iyr"
-	expirationYear = "eyr"
-	height         = "hgt"
-	hairColor      = "hcl"
-	eyeColor       = "ecl"
-	passportID     = "pid"
-	countryID      = "cid"
-)
-
-var requiredFields = []string{birthYear, issueYear, expirationYear, height, hairColor, eyeColor, passportID}
-
 func main() {
 	input, err := util.ReadInputAsString("./day4/input.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	validPassports := make([]map[string]string, 0)
-	invalidPassports := make([]map[string]string, 0)
+	fmt.Printf("Part 1: %d\n", part1(input))
+	fmt.Printf("Part 2: %d\n", part2(input))
+}
+
+func part1(input []string) int {
+	valid, _ := parsePassports(input)
+	return len(valid)
+}
+
+func part2(input []string) int {
+	valid, _ := parsePassports(input)
+	return len(valid)
+}
+
+func parsePassports(input []string) (validPassports, invalidPassports []map[string]string) {
+	validPassports = make([]map[string]string, 0)
+	invalidPassports = make([]map[string]string, 0)
 
 	currentPassport := make(map[string]string)
 	for _, line := range input {
@@ -55,13 +57,12 @@ func main() {
 	} else {
 		invalidPassports = append(invalidPassports, currentPassport)
 	}
-
-	fmt.Printf("Valid passports: %d", len(validPassports))
+	return validPassports, invalidPassports
 }
 
-func passportIsValid(passport map[string]string, requiredFields []string) bool {
+func passportIsValid(passport map[string]string, requiredFields []FieldValidator) bool {
 	for _, f := range requiredFields {
-		if _, ok := passport[f]; !ok {
+		if item, ok := passport[f.Name()]; !ok || !f.IsValid(item) {
 			return false
 		}
 	}
