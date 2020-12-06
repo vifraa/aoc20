@@ -29,7 +29,7 @@ func main() {
 	validPassports := make([]map[string]string, 0)
 	invalidPassports := make([]map[string]string, 0)
 
-	currentPassport := make(map[string]string, 0)
+	currentPassport := make(map[string]string)
 	for _, line := range input {
 		if line == "" {
 			if passportIsValid(currentPassport, requiredFields) {
@@ -38,7 +38,7 @@ func main() {
 				invalidPassports = append(invalidPassports, currentPassport)
 			}
 
-			currentPassport = make(map[string]string, 0)
+			currentPassport = make(map[string]string)
 			continue
 		}
 
@@ -49,6 +49,11 @@ func main() {
 			value := sp[1]
 			currentPassport[key] = value
 		}
+	}
+	if passportIsValid(currentPassport, requiredFields) {
+		validPassports = append(validPassports, currentPassport)
+	} else {
+		invalidPassports = append(invalidPassports, currentPassport)
 	}
 
 	fmt.Printf("Valid passports: %d", len(validPassports))
