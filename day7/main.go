@@ -10,8 +10,30 @@ import (
 func main() {
 	input, _ := util.ReadInputAsString("./day7/input.txt")
 
-	totalMapped := make(map[string]map[string]int)
+	fmt.Printf("Part 1: %d\n", part1(input)) // Should be 259
+	fmt.Printf("Part 2: %d\n", part2(input))
+}
 
+
+func part1(input []string) int {
+	bagsMapped := mapBagContents(input)
+	counter := 0
+	for _, v := range bagsMapped {
+		if contains(v, bagsMapped) {
+			counter++
+		}
+	}
+	return counter
+}
+
+func part2(input []string) int {
+	bagsMapped := mapBagContents(input)
+	return countInside(bagsMapped["shiny gold"], bagsMapped)
+}
+
+
+func mapBagContents(input []string) map[string]map[string]int {
+	totalMapped := make(map[string]map[string]int)
 	for _, s := range input {
 		t := strings.Split(s, "bags contain")
 		parent := strings.TrimSpace(t[0])
@@ -39,17 +61,7 @@ func main() {
 
 		totalMapped[parent] = bag
 	}
-
-
-	counter := 0
-	for _, v := range totalMapped {
-		if contains(v, totalMapped) {
-			counter++
-		}
-	}
-
-	fmt.Printf("Part 1: %d\n", counter) // Should be 259
-	fmt.Printf("Part 2: %d\n", countInside(totalMapped["shiny gold"], totalMapped))
+	return totalMapped
 }
 
 
