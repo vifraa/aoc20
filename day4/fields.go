@@ -150,6 +150,6 @@ func (pID PassportId) Name() string {
 }
 
 func (_ PassportId) IsValid(f string) bool {
-	valid, _ := regexp.Match("^[0-9]{8}[1-9]$", []byte(f))
-	return valid
+	valid, _ := regexp.Match("^[0-9]*[1-9]+[0-9]*$", []byte(f))
+	return valid && len(f) == 9
 }
