@@ -18,28 +18,34 @@ func main() {
 }
 
 func part1(input []string) int {
-	valid, _ := parsePassports(input)
-	return len(valid)
+	passports := parsePassports(input)
+	validPassports := make([]map[string]string, 0)
+	for _, p := range passports {
+		if passportRequiredFieldsExist(p, requiredFields) {
+			validPassports = append(validPassports, p)
+		}
+	}
+	return len(validPassports)
 }
 
 func part2(input []string) int {
-	valid, _ := parsePassports(input)
-	return len(valid)
+	passports := parsePassports(input)
+	validPassports := make([]map[string]string, 0)
+	for _, p := range passports {
+		if passportIsValid(p, requiredFields) {
+			validPassports = append(validPassports, p)
+		}
+	}
+	return len(validPassports)
 }
 
-func parsePassports(input []string) (validPassports, invalidPassports []map[string]string) {
-	validPassports = make([]map[string]string, 0)
-	invalidPassports = make([]map[string]string, 0)
+func parsePassports(input []string) (passports []map[string]string) {
+	passports = make([]map[string]string, 0)
 
 	currentPassport := make(map[string]string)
 	for _, line := range input {
 		if line == "" {
-			if passportIsValid(currentPassport, requiredFields) {
-				validPassports = append(validPassports, currentPassport)
-			} else {
-				invalidPassports = append(invalidPassports, currentPassport)
-			}
-
+			passports = append(passports, currentPassport)
 			currentPassport = make(map[string]string)
 			continue
 		}
@@ -52,12 +58,20 @@ func parsePassports(input []string) (validPassports, invalidPassports []map[stri
 			currentPassport[key] = value
 		}
 	}
-	if passportIsValid(currentPassport, requiredFields) {
-		validPassports = append(validPassports, currentPassport)
-	} else {
-		invalidPassports = append(invalidPassports, currentPassport)
+	if len(currentPassport) > 0 {
+		passports = append(passports, currentPassport)
 	}
-	return validPassports, invalidPassports
+
+	return passports
+}
+
+func passportRequiredFieldsExist(passport map[string]string, requiredFields []FieldValidator) bool {
+	for _, f := range requiredFields {
+		if _, ok := passport[f.Name()]; !ok {
+			return false
+		}
+	}
+	return true
 }
 
 func passportIsValid(passport map[string]string, requiredFields []FieldValidator) bool {
