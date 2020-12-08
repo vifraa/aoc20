@@ -7,8 +7,6 @@ import (
 	"strings"
 )
 
-var accumulator = 0
-
 func main() {
 	input, _ := util.ReadInputAsString("./day8/input.txt")
 
@@ -24,7 +22,6 @@ func part1(input []string) int {
 	}
 	return -1
 }
-
 
 func part2(input []string) int {
 	baseCommands := parseCommands(input)
@@ -42,16 +39,16 @@ func part2(input []string) int {
 
 func isCorrectExec(cmds []Command) (int, bool) {
 	lineExecutionCounter := make(map[int]int)
-	localAcc := 0
-	for i := 0; i < len(cmds);{
+	accumulator := 0
+	for i := 0; i < len(cmds); {
 		cmd := cmds[i]
 
 		if lineExecutionCounter[i] == 1 {
-			return localAcc, false
+			return accumulator, false
 		}
 
 		if cmd.name == "acc" {
-			localAcc += cmd.operand
+			accumulator += cmd.operand
 			lineExecutionCounter[i]++
 			i++
 		} else if cmd.name == "jmp" {
@@ -63,7 +60,7 @@ func isCorrectExec(cmds []Command) (int, bool) {
 		}
 	}
 
-	return localAcc, true
+	return accumulator, true
 }
 
 func createCmdSequences(cmds []Command) [][]Command {
@@ -84,7 +81,6 @@ func createCmdSequences(cmds []Command) [][]Command {
 	return res
 }
 
-
 func parseCommands(input []string) []Command {
 	result := make([]Command, 0)
 	for _, i := range input {
@@ -100,6 +96,6 @@ func parseCommands(input []string) []Command {
 }
 
 type Command struct {
-	name string
+	name    string
 	operand int
 }
