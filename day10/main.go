@@ -32,6 +32,31 @@ func Part1(input []int) int {
 }
 
 func Part2(input []int) int {
+	input = append(input, 0)
+	sort.Ints(input)
+	input = append(input, input[len(input)-1]+3)
 
-	return 0
+	steps := map[int]int{}
+
+	for i := len(input) - 1; i >= 0; i-- {
+		num := input[i]
+
+		possibilities := 0
+		if v, ok := steps[num+1]; ok && v > 0 {
+			possibilities += v
+		}
+		if v, ok := steps[num+2]; ok && v > 0 {
+			possibilities += v
+		}
+		if v, ok := steps[num+3]; ok && v > 0 {
+			possibilities += v
+		}
+		if possibilities == 0 {
+			possibilities++
+		}
+
+		steps[num] = possibilities
+	}
+
+	return steps[0]
 }
