@@ -47,3 +47,19 @@ func ReadInputAsString(path string) ([]string, error) {
 	}
 	return result, nil
 }
+
+func EqualsStringSlice(i1, i2 []string) bool {
+	if len(i1) != len(i2) {
+		return false
+	}
+
+	for i := 0; i < len(i1); i++ {
+		s1 := i1[i]
+		s2 := i2[i]
+
+		if s1 != s2 {
+			return false
+		}
+	}
+	return true
+}
