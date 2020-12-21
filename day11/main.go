@@ -18,13 +18,14 @@ func Part1(input []string) int {
 		tmp := modelSeatMovement(input)
 
 		if util.EqualsStringSlice(input, tmp) {
-			return counter
+			break
 		}
 
 		counter++
 		input = tmp
 	}
-	return counter
+
+	return countOccupiedSeats(input)
 }
 
 func Part2(input []string) int {
@@ -35,18 +36,18 @@ func modelSeatMovement(input []string) []string {
 	tmp := make([]string, len(input))
 	copy(tmp, input)
 
-	for x := 0; x < len(tmp); x++ {
+	for x := 0; x < len(input); x++ {
 		row := input[x]
 		for y := 0; y < len(row); y++ {
 			elem := row[y]
 			switch elem {
 			case 'L':
 				if GetOccupiedAdjacentSeats(input, x, y) == 0 {
-					tmp[x] = input[x][0:y] + "#" + input[x][y+1:]
+					tmp[x] = tmp[x][0:y] + "#" + tmp[x][y+1:]
 				}
 			case '#':
 				if GetOccupiedAdjacentSeats(input, x, y) >= 4 {
-					tmp[x] = input[x][0:y] + "L" + input[x][y+1:]
+					tmp[x] = tmp[x][0:y] + "L" + tmp[x][y+1:]
 				}
 			default:
 				continue
@@ -77,4 +78,16 @@ func GetOccupiedAdjacentSeats(seats []string, row, col int) int {
 	}
 
 	return found
+}
+
+func countOccupiedSeats(seats []string) int {
+	res := 0
+	for _, s := range seats {
+		for _, ss := range s {
+			if ss == '#' {
+				res++
+			}
+		}
+	}
+	return res
 }
