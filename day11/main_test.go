@@ -24,7 +24,7 @@ func TestPart1(t *testing.T) {
 }
 
 func TestPart2(t *testing.T) {
-	expected := 0
+	expected := 26
 	actual := Part2(input)
 	if expected != actual {
 		t.Errorf("Expected: %d, Got: %d", expected, actual)
